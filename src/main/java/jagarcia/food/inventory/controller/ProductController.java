@@ -1,10 +1,12 @@
 package jagarcia.food.inventory.controller;
 
 import jagarcia.food.inventory.entity.Product;
+import jagarcia.food.inventory.exception.ResourceNotFound;
 import jagarcia.food.inventory.service.ProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,5 +31,14 @@ public class ProductController {
     public Product saveProduct(@RequestBody Product product) {
         logger.info("Product to save: " + product);
         return productService.saveProduct(product);
+    }
+    @GetMapping("products/{id}")
+    public ResponseEntity<Product> getProductById(@PathVariable("id") Long id) {
+        Product product = productService.findProductById(id);
+        if (product == null) {
+            throw new ResourceNotFound("Id not found" + id);
+        }
+            return ResponseEntity.ok(product);
+
     }
 }
