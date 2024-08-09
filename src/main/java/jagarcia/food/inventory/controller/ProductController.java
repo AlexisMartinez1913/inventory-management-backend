@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("fi-app")
-@CrossOrigin(value = "http://localhost:3000")
+@CrossOrigin(value = "http://localhost:5173")
 public class ProductController {
     private static  final Logger logger =
             LoggerFactory.getLogger(ProductController.class);
