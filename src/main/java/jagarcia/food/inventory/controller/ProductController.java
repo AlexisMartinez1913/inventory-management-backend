@@ -32,6 +32,7 @@ public class ProductController {
         logger.info("Product to save: " + product);
         return productService.saveProduct(product);
     }
+
     @GetMapping("products/{id}")
     public ResponseEntity<Product> getProductById(@PathVariable("id") Long id) {
         Product product = productService.findProductById(id);
@@ -40,5 +41,22 @@ public class ProductController {
         }
             return ResponseEntity.ok(product);
 
+    }
+
+    @PutMapping("products/{id}")
+    public ResponseEntity<Product> updateProduct(@PathVariable("id") Long id, @RequestBody Product product) {
+        logger.info("Product to update: " + product);
+        Product updatedProduct = productService.findProductById(id);
+        if (updatedProduct == null) {
+            throw new ResourceNotFound("Product with Id not found" + id);
+        }
+        updatedProduct.setName(product.getName());
+        updatedProduct.setDescription(product.getDescription());
+        updatedProduct.setCategory(product.getCategory());
+        updatedProduct.setPrice(product.getPrice());
+        updatedProduct.setStock(product.getStock());
+        productService.saveProduct(updatedProduct);
+
+        return ResponseEntity.ok(updatedProduct);
     }
 }
