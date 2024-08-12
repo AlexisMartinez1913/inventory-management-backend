@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("fi-app")
@@ -58,5 +60,19 @@ public class ProductController {
         productService.saveProduct(updatedProduct);
 
         return ResponseEntity.ok(updatedProduct);
+    }
+
+    @DeleteMapping("/products/{id}")
+    public ResponseEntity<Map<String, Boolean>> deleteProduct(@PathVariable("id") Long id) {
+        logger.info("Product to delete: " + id);
+        Product product = productService.findProductById(id);
+        if (product == null) {
+            throw new ResourceNotFound("Product  not found with id:" + id);
+        }
+        productService.deleteProduct(product);
+        //Json {"deleted": "true"}
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("Deleted", Boolean.TRUE);
+        return ResponseEntity.ok(response);
     }
 }
